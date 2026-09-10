@@ -1,9 +1,20 @@
-import { Controller, Get, Param, Patch, ParseIntPipe, UseGuards, Post, Body } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { SolicitacoesService } from './solicitacoes.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { CriarSolicitacaoDto } from './dto/criar-solicitacao.dto';
+import { FiltrarSolicitacoesDto } from './dto/filtrar-solicitacoes.dto';
 
 @Controller('solicitacoes')
 export class SolicitacoesController {
@@ -17,8 +28,8 @@ export class SolicitacoesController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  listar() {
-    return this.solicitacoesService.listar();
+  listar(@Query() filtros: FiltrarSolicitacoesDto) {
+    return this.solicitacoesService.listar(filtros);
   }
 
   @UseGuards(JwtAuthGuard)
