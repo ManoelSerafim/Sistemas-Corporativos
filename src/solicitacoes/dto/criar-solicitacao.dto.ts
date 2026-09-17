@@ -4,12 +4,12 @@ export class CriarSolicitacaoDto {
   @IsString()
   @MinLength(5)
   @MaxLength(150)
-  titulo: string;
+  titulo!: string;
 
   @IsString()
   @MinLength(2)
   @MaxLength(30)
-  centroCusto: string;
+  centroCusto!: string;
 
   @IsOptional()
   @IsIn(['normal', 'urgente'])
