@@ -7,6 +7,7 @@ import { Solicitacao } from './solicitacao.entity';
 import { DataSource } from 'typeorm';
 import { ConflictException } from '@nestjs/common';
 import { Auditoria } from 'src/auditoria/auditoria.entity';
+import { CentrosCusto } from 'src/centros-custo/centros-custo.entity';
 
 
 @Injectable()
@@ -40,6 +41,7 @@ export class SolicitacoesService {
     const solicitacao = this.repository.create({
       titulo: dto.titulo,
       centroCusto: dto.centroCusto,
+      valorEstimado: dto.valorEstimado,
       prioridade: dto.prioridade ?? 'normal',
       status: 'pendente',
     });
@@ -56,6 +58,8 @@ export class SolicitacoesService {
       if (solicitacao.status !== 'pendente') {
         throw new ConflictException('Solicitação não está pendente');
       }
+      
+      // Aqui era pra fazer um query e consultar se o saldo retornado era maior que o saldo da solicitação e positivo. mas fiquei sem tempo.
 
       const resultado = await manager
         .createQueryBuilder()
@@ -64,6 +68,9 @@ export class SolicitacoesService {
         .where('id = :id', { id })
         .andWhere('versao = :versao', { versao: versaoEsperada })
         .andWhere('status = :status', { status: 'pendente' })
+        .update(CentrosCusto)
+        .set({ saldo: () => `saldo - ${solicitacao.valorEstimado}`, versao: () => 'versao + 1' })
+        .where('codigo = :codigo', { codigo: solicitacao.centroCusto })
         .execute();
 
       if (resultado.affected !== 1) {

@@ -8,7 +8,7 @@
 
   "scripts": {
     "build": "nest build",
-    "seed": "ts-node src/database/seeds/solicitacoes.seed.ts",
+    "seed": "ts-node src/database/seeds/centro-custo.seed.ts && ts-node src/database/seeds/solicitacoes.seed.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

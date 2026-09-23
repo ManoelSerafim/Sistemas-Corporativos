@@ -1,34 +1,27 @@
 import 'dotenv/config';
 import dataSource from '../data-source';
-import { Solicitacao } from '../../solicitacoes/solicitacao.entity';
+import { CentrosCusto } from '../../centros-custo/centros-custo.entity';
 
 const dados = [
   {
-    titulo: 'Aquisição de monitor',
-    centroCusto: 'CC-0009',
-    valorEstimado: 1000,
-    prioridade: 'normal' as const,
-  },
-  {
-    titulo: 'Substituição de servidor',
-    centroCusto: 'CC-0009',
-    valorEstimado: 6000,
-    prioridade: 'urgente' as const,
+    codigo: 'CC-0009',
+    nome: 'Desenvolvimento de Sistemas',
+    exemploDespesas: 'Compra de computadores, monitores e periféricos',
+    saldo: 5000.00,
   },
 ];
 
 async function executar() {
   await dataSource.initialize();
-  const repository = dataSource.getRepository(Solicitacao);
+  const repository = dataSource.getRepository(CentrosCusto);
 
   for (const item of dados) {
-    const existente = await repository.findOneBy({ titulo: item.titulo });
+    const existente = await repository.findOneBy({ codigo: item.codigo });
 
     if (!existente) {
       await repository.save(
         repository.create({
           ...item,
-          status: 'pendente',
         }),
       );
     }

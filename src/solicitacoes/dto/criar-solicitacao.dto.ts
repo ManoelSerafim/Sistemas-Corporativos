@@ -11,6 +11,9 @@ export class CriarSolicitacaoDto {
   @MaxLength(30)
   centroCusto!: string;
 
+  @IsIn([0, 1000000])
+  valorEstimado!: number;
+
   @IsOptional()
   @IsIn(['normal', 'urgente'])
   prioridade?: 'normal' | 'urgente';
